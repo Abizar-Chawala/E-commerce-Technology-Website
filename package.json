@@ -1,0 +1,16 @@
+{
+  "name": "exotic-pets-backend",
+  "version": "1.0.0",
+  "description": "Backend for IT 202 E-Commerce Final Project - Exotic Pets Store",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["ecommerce", "nodejs", "express", "exotic-pets"],
+  "author": "Your Group Name",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  }
+}
