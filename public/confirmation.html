@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Order Confirmed - Exotic Pets Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .confirmation-container {
+      max-width: 600px;
+      margin: 60px auto;
+      text-align: center;
+      background: #ffffff;
+      padding: 48px 32px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.12);
+    }
+
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: #10b981;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      animation: scaleIn 0.5s ease-out;
+    }
+
+    .success-icon svg {
+      width: 48px;
+      height: 48px;
+      stroke: white;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    @keyframes scaleIn {
+      0% {
+        transform: scale(0);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .confirmation-container h1 {
+      font-size: 2.5rem;
+      color: #111827;
+      margin-bottom: 16px;
+    }
+
+    .confirmation-container p {
+      color: #6b7280;
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+
+    .order-details {
+      background: #f9fafb;
+      border-radius: 12px;
+      padding: 24px;
+      margin: 32px 0;
+      border: 1px solid #e5e7eb;
+    }
+
+    .order-details h3 {
+      color: #374151;
+      margin-bottom: 12px;
+      font-size: 1.1rem;
+    }
+
+    .order-details p {
+      color: #6b7280;
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 32px;
+    }
+
+    .btn-primary {
+      padding: 14px 32px;
+      border-radius: 10px;
+      border: none;
+      background: #2563eb;
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    .btn-secondary {
+      padding: 14px 32px;
+      border-radius: 10px;
+      border: 2px solid #e5e7eb;
+      background: white;
+      color: #374151;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+      border-color: #2563eb;
+      color: #2563eb;
+      transform: translateY(-2px);
+    }
+
+    .email-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: #eff6ff;
+      padding: 16px;
+      border-radius: 10px;
+      margin-top: 24px;
+      border: 1px solid #dbeafe;
+    }
+
+    .email-note svg {
+      width: 20px;
+      height: 20px;
+      stroke: #2563eb;
+      flex-shrink: 0;
+    }
+
+    .email-note p {
+      margin: 0;
+      color: #1e40af;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">🦎 Exotic Pets Store</div>
+    <nav class="nav-links">
+      <a href="/">Back to Products</a>
+    </nav>
+  </header>
+
+  <main class="main">
+    <div class="confirmation-container">
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+
+      <h1>Order Confirmed!</h1>
+      <p>Thank you for your purchase!</p>
+      <p>Your exotic pets are on their way to their new home.</p>
+
+      <div class="order-details">
+        <h3>What's Next?</h3>
+        <p>📧 Check your email for order confirmation and tracking details</p>
+        <p>📦 Estimated delivery: 3-5 business days</p>
+        <p>🦎 Care instructions will be included with your order</p>
+      </div>
+
+      <div class="email-note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+          <polyline points="22,6 12,13 2,6"></polyline>
+        </svg>
+        <p>A confirmation email has been sent to your inbox</p>
+      </div>
+
+      <div class="action-buttons">
+        <button class="btn-primary" onclick="window.location.href='/'">
+          Continue Shopping
+        </button>
+        <button class="btn-secondary" onclick="window.print()">
+          Print Receipt
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; <span id="year"></span> Exotic Pets Store. All rights reserved.</p>
+  </footer>
+
+  <script src="/script.js" defer></script>
+</body>
+</html>
