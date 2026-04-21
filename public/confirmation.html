@@ -28,3 +28,46 @@
 <body>
   <header class="navbar">
     <div class="logo">
+      <img src="/images/logo.png" alt="Critter Kingdom" class="logo-img" style="height:44px;width:auto;" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'" />
+      <span class="logo-text">Critter Kingdom</span>
+    </div>
+    <nav class="nav-links">
+      <a href="/">Back to Products</a>
+      <a href="/care-guide">Care Guide</a>
+    </nav>
+  </header>
+
+  <main class="main">
+    <div class="confirmation-container">
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      </div>
+      <h1>Order Confirmed!</h1>
+      <p>Thank you for your purchase!</p>
+      <p>Your exotic pets are on their way to their new home.</p>
+      <div class="order-details">
+        <h3>What's Next?</h3>
+        <p>📧 Check your email for order confirmation and tracking details</p>
+        <p>📦 Estimated delivery: 3-5 business days</p>
+        <p>🦎 Care instructions will be included with your order</p>
+      </div>
+      <div class="email-note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+          <polyline points="22,6 12,13 2,6"></polyline>
+        </svg>
+        <p>A confirmation email has been sent to your inbox</p>
+      </div>
+      <div class="action-buttons">
+        <button class="btn-primary" onclick="window.location.href='/'">Continue Shopping</button>
+        <button class="btn-secondary" onclick="window.print()">Print Receipt</button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; <span id="year"></span> Exotic Pets Store. Created by Mollie, Megha, Abizar, Danny, and Jivitesh.</p>
+  </footer>
+  <script src="/script.js" defer></script>
+</body>
+</html>
