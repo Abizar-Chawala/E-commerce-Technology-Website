@@ -2,70 +2,80 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <title>Exotic Pets Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/styles.css" <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
   <title>Shopping Cart - Exotic Pets Store</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body data-page="cart">
   <header class="navbar">
-    <div class="logo">🦎 Exotic Pets Store</div>
+    <div class="logo">
+      <img src="/images/logo.png" alt="Critter Kingdom" class="logo-img" style="height:44px;width:auto;" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'" />
+      <span class="logo-text">Critter Kingdom</span>
+    </div>
     <nav class="nav-links">
       <a href="/">Products</a>
+      <a href="/care-guide">Care Guide</a>
       <a href="/cart" class="active">Cart (<span id="cart-count">0</span>)</a>
+      <a href="/login" class="nav-login-btn" id="nav-auth-link">Login</a>
     </nav>
   </header>
 
   <main class="main">
     <div class="cart-container">
-      <!-- Left Side: Cart Items -->
+      <!-- Left: Cart Items -->
       <div class="cart-main">
         <div class="cart-header">
           <h1>Shopping Cart</h1>
           <p class="cart-item-count" id="item-count-text">0 items</p>
         </div>
-
-        <div id="cart-items" class="cart-items-list">
-          <!-- Items will be populated by JavaScript -->
-        </div>
-
+        <div id="cart-items" class="cart-items-list"></div>
         <div class="cart-actions">
           <a href="/" class="continue-shopping">← Continue Shopping</a>
         </div>
       </div>
 
-      <!-- Right Side: Order Summary -->
+      <!-- Right: Order Summary -->
       <div class="cart-sidebar">
         <div class="order-summary-card">
           <h2>Order Summary</h2>
-          
           <div class="summary-row">
             <span>Subtotal</span>
             <span class="summary-value">$<span id="subtotal">0.00</span></span>
           </div>
-          
           <div class="summary-row">
             <span>Shipping</span>
             <span class="summary-value shipping-free">FREE</span>
           </div>
-          
           <div class="summary-row">
             <span>Tax (8%)</span>
             <span class="summary-value">$<span id="tax">0.00</span></span>
           </div>
-          
           <div class="summary-divider"></div>
-          
           <div class="summary-row summary-total">
             <span>Total</span>
             <span class="summary-value">$<span id="total">0.00</span></span>
           </div>
 
+          <!-- Button goes to quiz, not checkout directly -->
           <button id="checkout-btn" class="checkout-button">
             <span>Proceed to Checkout</span>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </button>
+
+          <div class="quiz-gate-note">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/>
+            </svg>
+            A short care quiz is required before checkout.
+          </div>
 
           <div class="trust-badges">
             <div class="trust-badge">
@@ -98,6 +108,33 @@
         </div>
       </div>
     </div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; <span id="year"></span> Exotic Pets Store. Created by Mollie, Megha, Abizar, Danny, and Jivitesh.</p>
+  </footer>
+  <script src="/script.js" defer></script>
+</body>
+</html>
+</head>
+<body data-page="products">
+  <header class="navbar">
+    <div class="logo">Exotic Pets Store</div>
+    <nav class="nav-links">
+      <a href="/">Products</a>
+      <a href="/cart">Cart (<span id="cart-count">0</span>)</a>
+    </nav>
+  </header>
+
+  <main class="main">
+    <section class="hero">
+      <h1>Our Exotic Pets</h1>
+      <p>Discover our collection of unique and fascinating exotic pets.</p>
+    </section>
+
+    <section class="products-section">
+      <div id="products-container" class="products-grid"></div>
+    </section>
   </main>
 
   <footer class="footer">
