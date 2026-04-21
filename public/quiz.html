@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Care Quiz - Exotic Pets Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .quiz-wrapper {
+      max-width: 740px;
+      margin: 0 auto;
+      padding: 0 16px 60px;
+    }
+    .quiz-box {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+      overflow: hidden;
+    }
+
+    /* Empty cart state */
+    .quiz-empty {
+      text-align: center;
+      padding: 80px 32px;
+    }
+    .quiz-empty .empty-icon { font-size: 4rem; margin-bottom: 16px; }
+    .quiz-empty h2 { font-size: 1.8rem; color: #111827; margin-bottom: 10px; }
+    .quiz-empty p  { color: #6b7280; margin-bottom: 28px; }
+    .quiz-empty a  {
+      display: inline-block;
+      padding: 14px 32px;
+      background: #2563eb;
+      color: white;
+      border-radius: 10px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    /* Intro state */
+    .quiz-intro { padding: 48px 48px 40px; text-align: center; }
+    .quiz-badge {
+      display: inline-block;
+      background: #eff6ff;
+      color: #2563eb;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .quiz-intro h1 { font-size: 2rem; color: #111827; margin-bottom: 12px; }
+    .quiz-intro p  { color: #6b7280; font-size: 1rem; max-width: 520px; margin: 0 auto 32px; line-height: 1.6; }
+
+    .quiz-animal-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+    .animal-chip {
+      padding: 8px 18px;
+      background: #f3f4f6;
+      border-radius: 30px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .quiz-info-row {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+    }
+    .quiz-info-chip {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 16px 24px;
+      text-align: center;
+      min-width: 120px;
+    }
+    .quiz-info-chip .chip-icon { font-size: 1.6rem; display: block; margin-bottom: 6px; }
+    .quiz-info-chip p { font-size: 0.85rem; color: #374151; font-weight: 600; margin: 0; }
+
+    .quiz-btn-row {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .btn-outline {
+      padding: 13px 28px;
+      border: 2px solid #2563eb;
+      color: #2563eb;
+      background: white;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      font-family: inherit;
+    }
+    .btn-outline:hover { background: #eff6ff; }
+    .btn-primary {
+      padding: 13px 28px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s;
+    }
+    .btn-primary:hover { background: #1d4ed8; }
+    .btn-green {
+      padding: 13px 28px;
+      background: #16a34a;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s;
+    }
+    .btn-green:hover { background: #15803d; }
+
+    /* Question state */
+    .quiz-question-wrap { padding: 40px 48px 32px; }
+
+    .quiz-progress-bar {
+      height: 6px;
+      background: #e5e7eb;
+      border-radius: 3px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+    .quiz-progress-fill {
+      height: 100%;
+      background: #2563eb;
+      border-radius: 3px;
+      transition: width 0.4s ease;
+    }
+    .quiz-progress-label {
+      font-size: 0.85rem;
+      color: #6b7280;
+      margin-bottom: 8px;
+    }
+    .quiz-animal-tag {
+      display: inline-block;
+      background: #eff6ff;
+      color: #1d4ed8;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .quiz-q-text {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+    .quiz-options { display: flex; flex-direction: column; gap: 12px; }
+    .quiz-option {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.18s;
+      font-size: 0.95rem;
+      color: #374151;
+      background: white;
+      width: 100%;
+      text-align: left;
+      font-family: inherit;
+    }
+    .quiz-option:hover { border-color: #2563eb; background: #eff6ff; }
+    .quiz-option.selected { border-color: #2563eb; background: #eff6ff; color: #1e40af; }
+    .option-letter {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: #f3f4f6;
+      color: #374151;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+    .quiz-option.selected .option-letter { background: #2563eb; color: white; }
+
+    .quiz-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid #e5e7eb;
+    }
+    .btn-back {
+      padding: 12px 24px;
+      background: #f3f4f6;
+      color: #374151;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .btn-back:hover { background: #e5e7eb; }
+
+    /* Result state */
+    .quiz-result-wrap { padding: 48px; text-align: center; }
+    .result-icon { font-size: 4rem; margin-bottom: 12px; }
+    .quiz-result-wrap h2 { font-size: 2rem; margin-bottom: 8px; }
+    .quiz-result-wrap h2.passed { color: #15803d; }
+    .quiz-result-wrap h2.failed { color: #dc2626; }
+    .score-display {
+      font-size: 3rem;
+      font-weight: 800;
+      color: #2563eb;
+      margin: 10px 0 16px;
+    }
+    .result-msg { color: #6b7280; font-size: 1rem; margin-bottom: 32px; max-width: 500px; margin-left: auto; margin-right: auto; }
+
+    .answers-review {
+      text-align: left;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+    .answer-row {
+      display: flex;
+      gap: 14px;
+      padding: 16px 20px;
+      border-bottom: 1px solid #f3f4f6;
+      align-items: flex-start;
+    }
+    .answer-row:last-child { border-bottom: none; }
+    .answer-row.correct { background: #f0fdf4; }
+    .answer-row.wrong   { background: #fef2f2; }
+    .answer-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 2px; }
+    .answer-animal { font-size: 0.75rem; font-weight: 700; color: #2563eb; margin-bottom: 4px; }
+    .answer-q  { font-weight: 600; color: #111827; font-size: 0.9rem; margin-bottom: 4px; }
+    .answer-yours   { color: #dc2626; font-size: 0.83rem; margin-bottom: 2px; }
+    .answer-correct { color: #15803d; font-weight: 600; font-size: 0.83rem; margin-bottom: 2px; }
+    .answer-explain { color: #6b7280; font-size: 0.8rem; font-style: italic; }
+
+    .result-actions { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+
+    @media (max-width: 640px) {
+      .quiz-intro, .quiz-question-wrap, .quiz-result-wrap { padding: 28px 20px; }
+      .quiz-q-text { font-size: 1.05rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">
+      <img src="/images/logo.png" alt="Critter Kingdom" class="logo-img" style="height:44px;width:auto;" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'" />
+      <span class="logo-text">Critter Kingdom</span>
+    </div>
+    <nav class="nav-links">
+      <a href="/">Products</a>
+      <a href="/care-guide">Care Guide</a>
+      <a href="/cart">Cart (<span id="cart-count">0</span>)</a>
+    </nav>
+  </header>
+
+  <main class="main">
+    <div class="quiz-wrapper">
+      <div class="quiz-box" id="quiz-box">
+        <div class="quiz-empty" id="state-empty" style="display:none">
+          <div class="empty-icon">🛒</div>
+          <h2>Your cart is empty</h2>
+          <p>Add at least one animal to your cart before taking the care quiz.</p>
+          <a href="/">Browse Animals</a>
+        </div>
+        <div id="state-loading" style="padding:60px;text-align:center;color:#6b7280;">Loading your quiz...</div>
+        <div id="state-intro"    style="display:none"></div>
+        <div id="state-question" style="display:none"></div>
+        <div id="state-result"   style="display:none"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; <span id="year"></span> Exotic Pets Store. Created by Mollie, Megha, Abizar, Danny, and Jivitesh.</p>
+  </footer>
+
+  <script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Update cart count in navbar
+  fetch('/B_getcartcount').then(r=>r.json()).then(d=>{
+    const el = document.getElementById('cart-count');
+    if (el) el.textContent = d.count ?? 0;
+  }).catch(()=>{});
+
+  // =============================================
+  // ALL ANIMAL QUESTIONS - keyed by animal name
+  // =============================================
+  const ANIMAL_QUESTIONS = {
+    "Blue-Tongued Skink": [
+      {
+        q: "Blue-Tongued Skinks are best described as which of the following?",
+        options: ["Aggressive and hard to handle", "Friendly and great for beginners", "Strictly nocturnal hunters", "Fully aquatic reptiles"],
+        correct: 1,
+        explain: "Blue-Tongued Skinks are calm, rarely bite, and are widely recommended for first-time reptile owners."
+      },
+      {
+        q: "What temperature should the basking spot be for a Blue-Tongued Skink?",
+        options: ["65–70°F", "75–80°F", "90–100°F", "110–120°F"],
+        correct: 2,
+        explain: "Skinks need a basking spot of 90–100°F with a cooler side around 75–85°F."
+      },
+      {
+        q: "What percentage of a Blue-Tongued Skink's diet should be protein?",
+        options: ["10%", "30%", "60%", "90%"],
+        correct: 2,
+        explain: "About 60% protein (insects, meat) with the rest being vegetables and fruits."
+      }
+    ],
+    "Panther Chameleon": [
+      {
+        q: "Why should you minimize handling a Panther Chameleon?",
+        options: ["They are venomous", "They are highly sensitive to stress", "They require cold temperatures", "They need constant sunlight"],
+        correct: 1,
+        explain: "Chameleons are very stress-sensitive. Too much handling can seriously harm their health."
+      },
+      {
+        q: "What humidity level does a Panther Chameleon enclosure need?",
+        options: ["10–20%", "20–30%", "50–70%", "90–100%"],
+        correct: 2,
+        explain: "Panther Chameleons need 50–70% humidity maintained through daily misting or a drip system."
+      },
+      {
+        q: "How do Panther Chameleons drink water?",
+        options: ["From a water bowl", "By absorbing it through their skin", "By licking water droplets off leaves", "They don't need water"],
+        correct: 2,
+        explain: "Chameleons drink water droplets, so daily misting or a drip system is required."
+      }
+    ],
+    "Ball Python": [
+      {
+        q: "What should you NEVER do when feeding a Ball Python?",
+        options: ["Feed frozen/thawed prey", "Feed live prey", "Feed at night", "Feed once every two weeks"],
+        correct: 1,
+        explain: "Live prey can injure your snake. Always feed pre-killed or frozen/thawed rodents."
+      },
+      {
+        q: "What is the correct warm hide temperature for a Ball Python?",
+        options: ["65–70°F", "75–80°F", "88–92°F", "100–110°F"],
+        correct: 2,
+        explain: "The warm hide should be 88–92°F with ambient temperature around 78–80°F."
+      },
+      {
+        q: "Ball Pythons sometimes refuse food for weeks. This is usually because of what?",
+        options: ["They are sick and need a vet immediately", "They are shedding or in breeding season", "The enclosure is too warm", "They dislike frozen prey"],
+        correct: 1,
+        explain: "Hunger strikes during shedding or breeding season are completely normal for Ball Pythons."
+      }
+    ],
+    "Fennec Fox": [
+      {
+        q: "Fennec Foxes are nocturnal. What does this mean for owners?",
+        options: ["They need UV lighting all day", "They are most active at night and may disturb sleep", "They can be kept outdoors in any climate", "They require no social interaction"],
+        correct: 1,
+        explain: "Fennec Foxes are nocturnal — they'll be most active at night which can disrupt your sleep."
+      },
+      {
+        q: "Which of the following foods is TOXIC to Fennec Foxes?",
+        options: ["Mealworms", "Crickets", "Grapes and raisins", "Cooked chicken"],
+        correct: 2,
+        explain: "Grapes, raisins, and onions are toxic to Fennec Foxes and should always be avoided."
+      },
+      {
+        q: "Why must a Fennec Fox enclosure have buried fencing?",
+        options: ["To keep other animals out", "Because they are expert diggers and will escape", "To regulate temperature", "To block sunlight"],
+        correct: 1,
+        explain: "Fennec Foxes are expert diggers and climbers. Without buried fencing they will escape."
+      }
+    ],
+    "Sulcata Tortoise": [
+      {
+        q: "How long can a Sulcata Tortoise potentially live?",
+        options: ["10–15 years", "20–30 years", "40–50 years", "70–100+ years"],
+        correct: 3,
+        explain: "Sulcata Tortoises can live over 100 years — this is literally a generational commitment."
+      },
+      {
+        q: "What type of diet does a Sulcata Tortoise require?",
+        options: ["High protein, low fiber", "High fiber, low protein — mostly grasses and hay", "Primarily insects and fruit", "Commercial pellets only"],
+        correct: 1,
+        explain: "Sulcatas are high-fiber, low-protein herbivores. Grasses, hay, and leafy greens are their staple."
+      },
+      {
+        q: "Why are indoor setups only suitable for juvenile Sulcata Tortoises?",
+        options: ["They need UV light indoors", "Adults can grow up to 200 lbs and need 100+ sq ft outdoor space", "They become aggressive indoors", "Indoor temperatures are too warm"],
+        correct: 1,
+        explain: "Adults can reach 200 lbs and need large outdoor pens. Indoor setups simply aren't big enough."
+      }
+    ],
+    "Blue-and-Gold Macaw": [
+      {
+        q: "Which of the following foods is TOXIC to Blue-and-Gold Macaws?",
+        options: ["Leafy greens", "Pellets", "Avocado", "Cooked grains"],
+        correct: 2,
+        explain: "Avocado, chocolate, onions, and caffeine are all toxic to macaws and must be avoided."
+      },
+      {
+        q: "How much out-of-cage time does a Blue-and-Gold Macaw need daily?",
+        options: ["15–30 minutes", "1–2 hours", "4+ hours", "No out-of-cage time needed"],
+        correct: 2,
+        explain: "Macaws need at least 4 hours of out-of-cage time daily for physical and mental health."
+      },
+      {
+        q: "What happens to a Macaw that lacks daily social interaction?",
+        options: ["It becomes sleepy", "It develops feather-destructive behaviors and screaming", "It eats more food", "It becomes friendlier"],
+        correct: 1,
+        explain: "Without stimulation and social interaction, macaws develop feather-destroying behaviors and excessive screaming."
+      }
+    ],
+    "Ring-Tailed Cat": [
+      {
+        q: "Ring-Tailed Cats retain strong wild instincts. What does this mean for ownership?",
+        options: ["They are easy to train like dogs", "They are rarely truly domesticated and can be difficult as adults", "They prefer indoor cages", "They are herbivores"],
+        correct: 1,
+        explain: "Ring-Tailed Cats are not truly domesticated. Many owners find them very difficult to manage as adults."
+      },
+      {
+        q: "What type of enclosure does a Ring-Tailed Cat need?",
+        options: ["A small flat cage on the ground", "A large vertical enclosure with climbing structures", "An aquarium with water", "A simple dog crate"],
+        correct: 1,
+        explain: "Ring-Tailed Cats are agile climbers and need large vertical enclosures with branches and shelves."
+      }
+    ],
+    "Tanuki (Raccoon Dog)": [
+      {
+        q: "Why must a Tanuki enclosure have dig-proof fencing?",
+        options: ["They overheat underground", "They are strong diggers that will escape weak enclosures", "They are afraid of digging", "Digging ruins their fur"],
+        correct: 1,
+        explain: "Tanukis are strong and curious. Without dig-proof fencing they will escape."
+      },
+      {
+        q: "Tanukis are prone to obesity. When is portion control especially important?",
+        options: ["In summer", "In spring", "In winter", "All year equally"],
+        correct: 2,
+        explain: "Tanukis naturally bulk up in winter. Extra portion control is needed during colder months."
+      }
+    ],
+    "Sugar Glider": [
+      {
+        q: "Sugar Gliders are nocturnal. What does this mean?",
+        options: ["They need UV lighting all day", "They are active at night and sleep during the day", "They can be kept outdoors", "They do not need companionship"],
+        correct: 1,
+        explain: "Sugar Gliders rest during the day and become active after dark."
+      },
+      {
+        q: "What happens to a Sugar Glider that is kept alone without a companion?",
+        options: ["It becomes more independent", "It develops depression and may self-mutilate", "It eats more", "It sleeps longer"],
+        correct: 1,
+        explain: "Sugar Gliders are highly social. Lonely gliders can develop depression and self-mutilation behaviors."
+      },
+      {
+        q: "What loud sound do Sugar Gliders make when they are scared?",
+        options: ["Barking", "Hissing", "Crabbing", "Chirping"],
+        correct: 2,
+        explain: "Sugar Gliders make a loud 'crabbing' sound when frightened or stressed."
+      }
+    ],
+    "Bengal Cat": [
+      {
+        q: "Bengal Cats are known for which unusual behavior compared to most cats?",
+        options: ["Disliking play", "Loving water", "Sleeping 20 hours a day", "Being completely silent"],
+        correct: 1,
+        explain: "Bengal Cats are known to love water — a unique trait among domestic cats."
+      },
+      {
+        q: "What happens to a Bengal Cat that lacks mental stimulation?",
+        options: ["It becomes calmer", "It sleeps more", "It becomes destructive", "It stops eating"],
+        correct: 2,
+        explain: "Bengals are highly intelligent and energetic. Without stimulation they will become destructive."
+      }
+    ],
+    "Sphynx Cat": [
+      {
+        q: "Why do Sphynx Cats need weekly baths?",
+        options: ["They love swimming", "Without fur, skin oils build up and must be washed off", "Their skin dries out without water", "Bathing makes their skin softer"],
+        correct: 1,
+        explain: "Without fur to absorb oils, Sphynx Cats develop skin buildup that requires regular bathing."
+      },
+      {
+        q: "Why must Sphynx Cats be kept indoors only?",
+        options: ["They are too fast outdoors", "Their hairlessness makes them vulnerable to sunburn and cold", "They are aggressive with other animals", "They escape easily"],
+        correct: 1,
+        explain: "Sphynx Cats have no fur to protect them from cold temperatures or sunburn."
+      }
+    ],
+    "Capuchin Monkey": [
+      {
+        q: "Capuchin Monkeys are illegal in many states. What must you do before purchasing one?",
+        options: ["Nothing, they're legal everywhere", "Verify local laws and obtain any required permits", "Just find a seller online", "Ask your neighbors"],
+        correct: 1,
+        explain: "Capuchin Monkeys require special permits and are outright illegal in many US states."
+      },
+      {
+        q: "What is the minimum commitment when owning a Capuchin Monkey?",
+        options: ["5 years", "10 years", "20 years", "35–45 years"],
+        correct: 3,
+        explain: "Capuchin Monkeys live 35–45 years. This is one of the longest commitments of any exotic pet."
+      },
+      {
+        q: "What does boredom lead to in Capuchin Monkeys?",
+        options: ["More sleep", "Aggression and destructive behavior", "Friendlier behavior", "Loss of appetite only"],
+        correct: 1,
+        explain: "Capuchins are extremely intelligent. Boredom without enrichment leads directly to aggression."
+      }
+    ]
+  };
+
+  // =============================================
+  // QUIZ STATE
+  // =============================================
+  let questions = [];   // final selected questions
+  let userAnswers = []; // user's selected answer per question
+  let currentQ = 0;
+  let cartAnimals = []; // names of animals in cart
+
+  // =============================================
+  // SHOW/HIDE STATES
+  // =============================================
+  function showState(name) {
+    ['state-empty','state-loading','state-intro','state-question','state-result'].forEach(id => {
+      document.getElementById(id).style.display = id === name ? 'block' : 'none';
+    });
+  }
+
+  // =============================================
+  // BUILD QUESTIONS FROM CART
+  // =============================================
+  function buildQuestions(animalNames) {
+    let pool = [];
+    animalNames.forEach(name => {
+      const qs = ANIMAL_QUESTIONS[name];
+      if (qs && qs.length > 0) {
+        // pick up to 2 questions per animal
+        const shuffled = [...qs].sort(() => Math.random() - 0.5);
+        shuffled.slice(0, 2).forEach(q => pool.push({ ...q, animal: name }));
+      }
+    });
+    // shuffle and cap at 5
+    pool.sort(() => Math.random() - 0.5);
+    return pool.slice(0, Math.min(5, pool.length));
+  }
+
+  // =============================================
+  // RENDER INTRO
+  // =============================================
+  function renderIntro() {
+    const passNeeded = Math.ceil(questions.length * 0.6);
+    const el = document.getElementById('state-intro');
+    el.innerHTML = `
+      <div class="quiz-intro">
+        <span class="quiz-badge">🎓 Buyer Screening</span>
+        <h1>Exotic Pet Care Quiz</h1>
+        <p>This quiz is based specifically on the animals in your cart. You need to pass to prove you're ready to care for them. Answer <strong>${passNeeded} out of ${questions.length}</strong> questions correctly to pass.</p>
+
+        <div class="quiz-animal-chips">
+          ${cartAnimals.map(name => `<span class="animal-chip">${name}</span>`).join('')}
+        </div>
+
+        <div class="quiz-info-row">
+          <div class="quiz-info-chip"><span class="chip-icon">📝</span><p>${questions.length} Questions</p></div>
+          <div class="quiz-info-chip"><span class="chip-icon">✅</span><p>Pass: ${passNeeded}/${questions.length} correct</p></div>
+          <div class="quiz-info-chip"><span class="chip-icon">🐾</span><p>Your cart animals</p></div>
+        </div>
+
+        <div class="quiz-btn-row">
+          <a href="/care-guide" class="btn-outline">Study Care Guide</a>
+          <button class="btn-primary" onclick="startQuiz()">Start Quiz →</button>
+        </div>
+      </div>
+    `;
+    showState('state-intro');
+  }
+
+  // =============================================
+  // START QUIZ
+  // =============================================
+  function startQuiz() {
+    userAnswers = new Array(questions.length).fill(null);
+    currentQ = 0;
+    renderQuestion();
+  }
+
+  // =============================================
+  // RENDER QUESTION
+  // =============================================
+  function renderQuestion() {
+    const q = questions[currentQ];
+    const total = questions.length;
+    const pct = ((currentQ + 1) / total) * 100;
+    const isLast = currentQ === total - 1;
+
+    const el = document.getElementById('state-question');
+    el.innerHTML = `
+      <div class="quiz-question-wrap">
+        <div class="quiz-progress-label">Question ${currentQ + 1} of ${total}</div>
+        <div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width:${pct}%"></div></div>
+        <br/>
+        <span class="quiz-animal-tag">🐾 ${q.animal}</span>
+        <div class="quiz-q-text">${q.q}</div>
+        <div class="quiz-options">
+          ${q.options.map((opt, i) => `
+            <button class="quiz-option ${userAnswers[currentQ] === i ? 'selected' : ''}"
+              onclick="selectAnswer(${i})" id="opt-${i}">
+              <span class="option-letter">${String.fromCharCode(65+i)}</span>
+              ${opt}
+            </button>
+          `).join('')}
+        </div>
+        <div class="quiz-nav">
+          ${currentQ > 0
+            ? `<button class="btn-back" onclick="prevQuestion()">← Previous</button>`
+            : `<div></div>`
+          }
+          <button class="btn-primary" onclick="nextQuestion()">${isLast ? 'Submit Quiz' : 'Next →'}</button>
+        </div>
+      </div>
+    `;
+    showState('state-question');
+  }
+
+  function selectAnswer(i) {
+    userAnswers[currentQ] = i;
+    document.querySelectorAll('.quiz-option').forEach((btn, idx) => {
+      btn.classList.toggle('selected', idx === i);
+      btn.querySelector('.option-letter').style.background = idx === i ? '#2563eb' : '#f3f4f6';
+      btn.querySelector('.option-letter').style.color = idx === i ? 'white' : '#374151';
+    });
+  }
+
+  function prevQuestion() {
+    if (currentQ > 0) { currentQ--; renderQuestion(); }
+  }
+
+  function nextQuestion() {
+    if (userAnswers[currentQ] === null) {
+      alert('Please select an answer before continuing.');
+      return;
+    }
+    if (currentQ < questions.length - 1) {
+      currentQ++;
+      renderQuestion();
+    } else {
+      showResult();
+    }
+  }
+
+  // =============================================
+  // SHOW RESULT
+  // =============================================
+  function showResult() {
+    let score = 0;
+    questions.forEach((q, i) => { if (userAnswers[i] === q.correct) score++; });
+    const passNeeded = Math.ceil(questions.length * 0.6);
+    const passed = score >= passNeeded;
+
+    if (passed) sessionStorage.setItem('quizPassed', 'true');
+
+    const el = document.getElementById('state-result');
+    el.innerHTML = `
+      <div class="quiz-result-wrap">
+        <div class="result-icon">${passed ? '🎉' : '📖'}</div>
+        <h2 class="${passed ? 'passed' : 'failed'}">${passed ? 'You Passed!' : 'Not Quite There'}</h2>
+        <div class="score-display">${score} / ${questions.length}</div>
+        <p class="result-msg">${passed
+          ? "Great job! You've shown you're prepared to care for your animals. Proceed to checkout."
+          : `You need at least ${passNeeded} correct answers. Review the care guide for your specific animals and try again.`
+        }</p>
+
+        <div class="answers-review">
+          ${questions.map((q, i) => {
+            const isRight = userAnswers[i] === q.correct;
+            return `
+              <div class="answer-row ${isRight ? 'correct' : 'wrong'}">
+                <span class="answer-icon">${isRight ? '✅' : '❌'}</span>
+                <div>
+                  <div class="answer-animal">🐾 ${q.animal}</div>
+                  <div class="answer-q">${q.q}</div>
+                  ${!isRight ? `<div class="answer-yours">Your answer: ${q.options[userAnswers[i]]}</div>` : ''}
+                  <div class="answer-correct">Correct: ${q.options[q.correct]}</div>
+                  <div class="answer-explain">${q.explain}</div>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+
+        <div class="result-actions">
+          ${passed
+            ? `<button class="btn-green" onclick="window.location.href='/checkout'">Proceed to Checkout →</button>`
+            : `<a href="/care-guide" class="btn-outline">Study Care Guide</a>
+               <button class="btn-primary" onclick="retryQuiz()">Try Again</button>`
+          }
+        </div>
+      </div>
+    `;
+    showState('state-result');
+  }
+
+  function retryQuiz() {
+    questions = buildQuestions(cartAnimals);
+    startQuiz();
+  }
+
+  // =============================================
+  // INIT
+  // =============================================
+  async function init() {
+    showState('state-loading');
+    try {
+      const data = await fetch('/B_getcartitems').then(r => r.json());
+      const items = data.items || [];
+
+      if (items.length === 0) {
+        showState('state-empty');
+        return;
+      }
+
+      // Get unique animal names from cart
+      cartAnimals = [...new Set(items.map(item => item.product?.B_name).filter(Boolean))];
+
+      // Build questions from those animals
+      questions = buildQuestions(cartAnimals);
+
+      if (questions.length === 0) {
+        showState('state-empty');
+        return;
+      }
+
+      renderIntro();
+    } catch (e) {
+      showState('state-empty');
+    }
+  }
+
+  init();
+  </script>
+</body>
+</html>
