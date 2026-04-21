@@ -3,32 +3,31 @@ const express = require("express");
 const path = require("path");
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-// project folder and where it grabs from the this folder
+// project folder and where it grabs from this folder
 const projectPath = path.join(__dirname, "public");
 app.use(express.static(projectPath));
 
 // tax rate
 const taxRate = 0.08;
-//array of listed products and their attributes. NAME/PRICE/DESCRIPTION AND IMAGE OF ANIMAL
+
+// array of listed products and their attributes
 const products = [
   {
     id: 1,
     B_name: "Blue-Tongued Skink",
     B_price: 349.99,
-    B_desc:
-      "A friendly, hardy lizard known for its bright blue tongue and calm personality. Great for beginners.",
+    B_desc: "A friendly, hardy lizard known for its bright blue tongue and calm personality. Great for beginners.",
     B_img: "/images/Skink.jpg",
   },
   {
     id: 2,
     B_name: "Panther Chameleon",
     B_price: 429.99,
-    B_desc:
-      "Colorful chameleon that changes colors based on mood and environment.",
+    B_desc: "Colorful chameleon that changes colors based on mood and environment.",
     B_img: "/images/Chameleon.jpg",
   },
   {
@@ -49,8 +48,7 @@ const products = [
     id: 5,
     B_name: "Sulcata Tortoise",
     B_price: 399.99,
-    B_desc:
-      "Long-lived tortoise that can grow quite large; best for experienced keepers.",
+    B_desc: "Long-lived tortoise that can grow quite large; best for experienced keepers.",
     B_img: "/images/Tortoise.jpg",
   },
   {
@@ -106,8 +104,11 @@ const products = [
 
 let cart = [];
 let orders = [];
+let users = [];
 
-// section of front end 
+// ============================================
+// PAGE ROUTES
+// ============================================
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(projectPath, "index.html"));
@@ -125,12 +126,57 @@ app.get("/confirmation", (req, res) => {
   res.sendFile(path.join(projectPath, "confirmation.html"));
 });
 
-//Start of the backend API
+app.get("/login", (req, res) => {
+  res.sendFile(path.join(projectPath, "login.html"));
+});
 
-// products list
+app.get("/care-guide", (req, res) => {
+  res.sendFile(path.join(projectPath, "care-guide.html"));
+});
+
+app.get("/quiz", (req, res) => {
+  res.sendFile(path.join(projectPath, "quiz.html"));
+});
+
+// ============================================
+// AUTH API
+// ============================================
+
+// register a new user
+app.post("/B_register", (req, res) => {
+  const { name, email, password } = req.body;
+  if (!name || !email || !password) {
+    return res.status(400).json({ success: false, message: "All fields required." });
+  }
+  if (users.find((u) => u.email === email)) {
+    return res.status(400).json({ success: false, message: "Email already registered." });
+  }
+  users.push({ name, email, password });
+  res.json({ success: true, user: { name, email } });
+});
+
+// login an existing user
+app.post("/B_login", (req, res) => {
+  const { email, password } = req.body;
+  const user = users.find((u) => u.email === email && u.password === password);
+  if (!user) {
+    return res.status(401).json({ success: false, message: "Invalid email or password." });
+  }
+  res.json({ success: true, user: { name: user.name, email: user.email } });
+});
+
+// ============================================
+// PRODUCTS API
+// ============================================
+
+// get all products
 app.get("/B_getproducts", (req, res) => {
   res.json({ products, taxRate });
 });
+
+// ============================================
+// CART API
+// ============================================
 
 // add to cart
 app.post("/B_addtocart", (req, res) => {
@@ -147,13 +193,13 @@ app.post("/B_addtocart", (req, res) => {
   res.json({ success: true, cart });
 });
 
-// cart count
+// get cart count
 app.get("/B_getcartcount", (req, res) => {
   const count = cart.reduce((sum, item) => sum + item.quantity, 0);
   res.json({ count });
 });
 
-// full cart items
+// get full cart items with product details
 app.get("/B_getcartitems", (req, res) => {
   const items = cart.map((item) => {
     const product = products.find((p) => p.id === item.id);
@@ -162,16 +208,14 @@ app.get("/B_getcartitems", (req, res) => {
   res.json({ items, taxRate });
 });
 
-//this changes the quantity of the selected item 
+// update quantity of an item in cart
 app.put("/B_updateQuantity", (req, res) => {
   const { id, quantity } = req.body;
   const qty = Number(quantity);
 
   const existing = cart.find((item) => item.id === id);
   if (!existing) {
-    return res
-      .status(404)
-      .json({ success: false, message: "Item not in cart" });
+    return res.status(404).json({ success: false, message: "Item not in cart" });
   }
 
   if (qty <= 0) {
@@ -183,20 +227,23 @@ app.put("/B_updateQuantity", (req, res) => {
   res.json({ success: true, cart });
 });
 
-// remove  a item from the cart
+// remove an item from the cart
 app.delete("/B_removefromcart", (req, res) => {
   const { id } = req.body;
   cart = cart.filter((item) => item.id !== id);
   res.json({ success: true, cart });
 });
 
-// checkout
+// ============================================
+// CHECKOUT API
+// ============================================
+
+// process checkout and create order
 app.post("/B_checkout", (req, res) => {
   const { customerInfo } = req.body;
 
   const items = cart.map((item) => {
     const product = products.find((p) => p.id === item.id);
-    //retruns the selected product and their listed attributes
     return {
       id: item.id,
       name: product?.B_name,
@@ -205,13 +252,10 @@ app.post("/B_checkout", (req, res) => {
     };
   });
 
-  const subtotal = items.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const tax = Number((subtotal * taxRate).toFixed(2));
   const total = Number((subtotal + tax).toFixed(2));
-  //this is the layout of info that comes in the order
+
   const order = {
     id: orders.length + 1,
     items,
@@ -223,17 +267,20 @@ app.post("/B_checkout", (req, res) => {
   };
 
   orders.push(order);
-  cart = []; // this empties out the cart from what the user previously done 
+  cart = []; // empty cart after checkout
 
   res.json({ success: true, order });
 });
 
-// this grabs all the orders 
+// get all orders
 app.get("/B_getorders", (req, res) => {
   res.json({ orders });
 });
 
-// the followoing will print out the starting messages once the server is ran 
+// ============================================
+// START SERVER
+// ============================================
+
 app.listen(PORT, () => {
   console.log("========================================");
   console.log("🦎 Exotic Pets E-Commerce Backend");
@@ -242,5 +289,5 @@ app.listen(PORT, () => {
   console.log(`Products: ${products.length} exotic pets`);
   console.log(`Tax Rate: ${taxRate * 100}%`);
   console.log("========================================");
-  console.log(" GO TO http://localhost:3000  in URL");
+  console.log(` GO TO http://localhost:${PORT}  in URL`);
 });
